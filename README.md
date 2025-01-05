@@ -1,1 +1,3 @@
-# accounting
+# Accounting
+The application for account products.
+

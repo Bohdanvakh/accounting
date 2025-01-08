@@ -1,3 +1,1 @@
-# README
-
-Rails API application
+# Accounting application doccumentation

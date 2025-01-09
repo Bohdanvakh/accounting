@@ -33,6 +33,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_09_081658) do
     t.datetime "updated_at", null: false
     t.string "username"
     t.string "phone_number"
+    t.string "phone_confirmation_token"
+    t.datetime "token_sent_at"
   end
 
   add_foreign_key "components", "folders"

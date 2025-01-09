@@ -12,6 +12,9 @@ gem 'pg', '~> 1.5', '>= 1.5.9'
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 
+# Use twilio for authentication [https://github.com/twilio/twilio-ruby]
+gem 'twilio-ruby', '~> 7.4'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 

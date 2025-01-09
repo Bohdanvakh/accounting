@@ -15,6 +15,7 @@ gem "puma", ">= 5.0"
 # Use twilio for authentication [https://github.com/twilio/twilio-ruby]
 gem 'twilio-ruby', '~> 7.4'
 
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
@@ -42,6 +43,9 @@ gem "bootsnap", require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
+
+  # Use dotenv to load environment variables from .env into ENV in development [https://github.com/bkeepers/dotenv]
+  gem 'dotenv', '~> 3.1', '>= 3.1.7'
 end
 
 group :development do

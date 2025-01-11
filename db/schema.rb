@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_05_152625) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_11_140608) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,6 +31,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_05_152625) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "username"
+    t.string "phone_number"
+    t.string "phone_confirmation_token"
+    t.datetime "token_sent_at"
+    t.boolean "confirmed", default: false
   end
 
   add_foreign_key "components", "folders"

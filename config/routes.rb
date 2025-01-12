@@ -13,6 +13,8 @@ Rails.application.routes.draw do
       post 'confirm_user', to: 'users#confirm_user'
 
       resources :users, only: [:create]
+      resources :sessions, only: [:create]
+      resources :folders, only: [:index]
     end
   end
 end

@@ -15,6 +15,8 @@ gem "puma", ">= 5.0"
 # Use twilio for authentication [https://github.com/twilio/twilio-ruby]
 gem 'twilio-ruby', '~> 7.4'
 
+# Use jwt for authentication [https://github.com/jwt/ruby-jwt]
+gem 'jwt', '~> 2.10', '>= 2.10.1'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"

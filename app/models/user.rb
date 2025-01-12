@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   require 'jwt'
-  # require 'securerandom'
 
   has_many :folders, dependent: :destroy
   has_many :components, through: :folder
@@ -47,3 +46,4 @@ class User < ApplicationRecord
     SecureRandom.random_number(1_000_000).to_s.rjust(6, '0')
   end
 end
+

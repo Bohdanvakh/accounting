@@ -1,1 +1,1 @@
-# Accounting application doccumentation
+# Accounting application doccumentation.

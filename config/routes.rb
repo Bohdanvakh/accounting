@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       post 'confirm_user', to: 'users#confirm_user'
       post 'authenticate_phone_number', to: 'sessions#authenticate_phone_number'
+      post 'set_user_active_false', to: 'sessions#set_user_active_false'
 
       resources :users, only: [:create]
       resources :sessions, only: [:create]

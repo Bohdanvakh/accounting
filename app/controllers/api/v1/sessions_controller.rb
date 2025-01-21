@@ -27,7 +27,7 @@ module Api
         end
       end
 
-      def destroy
+      def set_user_active_false
         # in the frontend part of sign out logic we remove jwt token from local storage.
         current_user.update!(active: false)
       end

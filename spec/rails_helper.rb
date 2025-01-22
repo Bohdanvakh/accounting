@@ -1,6 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 require 'support/factory_bot'
+require 'factory_bot_rails'
 
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
@@ -68,3 +69,4 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 end
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }

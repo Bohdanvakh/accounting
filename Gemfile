@@ -49,6 +49,15 @@ group :development, :test do
 
   # Use dotenv to load environment variables from .env into ENV in development [https://github.com/bkeepers/dotenv]
   gem 'dotenv', '~> 3.1', '>= 3.1.7'
+
+  # Use rspec for testing [https://github.com/rspec/rspec-rails/tree/7-1-maintenance]
+  gem 'rspec-rails', '~> 7.0.0'
+
+  # Use factory bot for testing [https://github.com/thoughtbot/factory_bot_rails]
+  gem 'factory_bot_rails', '~> 6.4', '>= 6.4.4'
+
+  # Use faker for testing [https://github.com/faker-ruby/faker]
+  gem 'faker', '~> 3.5', '>= 3.5.1'
 end
 
 group :development do

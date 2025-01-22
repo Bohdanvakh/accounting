@@ -10,13 +10,16 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      post 'confirm_user', to: 'users#confirm_user'
-      post 'authenticate_phone_number', to: 'sessions#authenticate_phone_number'
-      post 'set_user_active_false', to: 'sessions#set_user_active_false'
+      post 'confirm_user', to: 'users#confirm_user', as: :confirm_user
+      post 'verify_phone', to: 'sessions#authenticate_phone_number', as: :verify_phone
+      post 'exit', to: 'sessions#set_user_active_false', as: :logout
 
       resources :users, only: [:create]
       resources :sessions, only: [:create]
-      resources :folders, only: [:index, :create, :show, :destroy]
+
+      resources :users do
+        resources :folders, only: [:index, :create, :show, :destroy]
+      end
     end
   end
 end

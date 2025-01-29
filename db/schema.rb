@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_22_132146) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_29_210720) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,6 +18,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_22_132146) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "folder_id", null: false
+    t.integer "price"
+    t.integer "code"
+    t.string "name"
     t.index ["folder_id"], name: "index_components_on_folder_id"
   end
 

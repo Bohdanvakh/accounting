@@ -7,3 +7,23 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+user = User.create!(
+  username: 'admin',
+  phone_number: '+1234567890',
+  confirmed: true,
+  active: true
+)
+
+folder = Folder.create!(
+  user: user,
+  name: 'My Folder',
+  description: 'This is a folder'
+)
+
+component = Component.create!(
+  folder: folder,
+  price: 100,
+  code: 1234567890,
+  name: 'Component 1'
+)

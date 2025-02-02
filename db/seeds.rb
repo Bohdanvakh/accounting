@@ -8,6 +8,8 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+User.destroy_all # remove users before run seeds
+
 user = User.create!(
   username: 'admin',
   phone_number: '+1234567890',
@@ -25,5 +27,15 @@ component = Component.create!(
   folder: folder,
   price: 100,
   code: 1234567890,
-  name: 'Component 1'
+  name: 'Component 1',
+  wieght: 10.5,
+  measurement: 'm',
+  currency: 'USD'
+)
+
+dimension = Dimension.create!(
+  component: component,
+  length: 10.1,
+  width: 10.05,
+  height: 10.1
 )

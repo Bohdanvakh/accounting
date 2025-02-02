@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_29_210720) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_02_144402) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,10 +18,23 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_29_210720) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "folder_id", null: false
-    t.integer "price"
+    t.float "price", null: false
     t.integer "code"
-    t.string "name"
+    t.string "name", limit: 120, null: false
+    t.decimal "wieght", precision: 10, scale: 2, null: false
+    t.string "measurement", null: false
+    t.string "currency", null: false
     t.index ["folder_id"], name: "index_components_on_folder_id"
+  end
+
+  create_table "dimentions", force: :cascade do |t|
+    t.float "length", null: false
+    t.float "width", null: false
+    t.float "height", null: false
+    t.bigint "component_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["component_id"], name: "index_dimentions_on_component_id"
   end
 
   create_table "folders", force: :cascade do |t|
@@ -45,5 +58,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_29_210720) do
   end
 
   add_foreign_key "components", "folders"
+  add_foreign_key "dimentions", "components"
   add_foreign_key "folders", "users"
 end

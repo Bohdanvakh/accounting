@@ -1,5 +1,10 @@
 class Component < ApplicationRecord
   belongs_to :folder
   has_one :user, through: :folder
-  has_one :dimention
+  has_one :dimension, dependent: :destroy
+
+  validates :price, presence: true
+  validates :name, presence: true, length: { maximum: 120 }
+  validates :wieght, presence: true
+  validates :measurement, presence: true
 end

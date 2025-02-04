@@ -20,6 +20,10 @@ Rails.application.routes.draw do
       resources :users do
         resources :folders, only: [:index, :create, :show, :destroy]
       end
+
+      resources :folders do
+        resources :components, only: [:index]
+      end
     end
   end
 end

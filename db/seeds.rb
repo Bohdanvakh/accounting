@@ -23,19 +23,25 @@ folder = Folder.create!(
   description: 'This is a folder'
 )
 
-component = Component.create!(
-  folder: folder,
-  price: 100,
-  code: 1234567890,
-  name: 'Component 1',
-  wieght: 10.5,
-  measurement: 'm',
-  currency: 'USD'
-)
+components = 10.times.map do |i|
+  Component.create!(
+    folder: folder,
+    price: 100 + i,
+    code: 1234567890 + i,
+    name: "Component #{i + 1}",
+    wieght: 10.5 + i,
+    measurement: 'm',
+    currency: 'USD'
+  )
+end
 
-dimension = Dimension.create!(
-  component: component,
-  length: 10.1,
-  width: 10.05,
-  height: 10.1
-)
+components.each do |component|
+  10.times do |i|
+    Dimension.create!(
+      component: component,
+      length: 10.1,
+      width: 10.05,
+      height: 10.1
+    )
+  end
+end

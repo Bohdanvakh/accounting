@@ -29,7 +29,7 @@ components = 10.times.map do |i|
     price: 100 + i,
     code: 1234567890 + i,
     name: "Component #{i + 1}",
-    wieght: 10.5 + i,
+    weight: 10.5 + i,
     measurement: 'm',
     currency: 'USD'
   )

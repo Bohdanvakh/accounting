@@ -9,7 +9,8 @@ class Component < ApplicationRecord
 
   # Validations
   validates :price, presence: true
+  validates :currency, presence: true
   validates :name, presence: true, length: { maximum: 120 }
-  validates :wieght, presence: true
+  validates :weight, presence: true
   validates :measurement, presence: true
 end

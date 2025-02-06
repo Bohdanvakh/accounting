@@ -36,12 +36,10 @@ components = 10.times.map do |i|
 end
 
 components.each do |component|
-  10.times do |i|
-    Dimension.create!(
-      component: component,
-      length: 10.1,
-      width: 10.05,
-      height: 10.1
-    )
-  end
+  Dimension.create!(
+    component: component,
+    length: 10.1,
+    width: 10.05,
+    height: 10.1
+  )
 end

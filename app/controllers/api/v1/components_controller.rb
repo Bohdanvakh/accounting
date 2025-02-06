@@ -1,9 +1,9 @@
 module Api
   module V1
     class ComponentsController < ApplicationController
-      before_action :authenticate!
-      before_action :get_folder, only: [:index, :create, :show]
-      before_action :get_component, only: [:show]
+      # before_action :authenticate!
+      before_action :get_folder, only: [:index, :create, :show, :destroy]
+      before_action :get_component, only: [:show, :destroy]
 
       def index
         if @folder
@@ -18,13 +18,22 @@ module Api
         if component.save
           render json: { component: component.with_dimension }, status: :ok
         else
-          render json: { error: component.errors.full_messages }, status: :unprocessable_entity
+          render json: { error: component.errors.messages }, status: :unprocessable_entity
         end
       end
 
       def show
         if @component
           render json: { component: @component.with_dimension }, status: :ok
+        else
+          render json: { error: "Component with ID: #{params[:id]} not found" }, status: :not_found
+        end
+      end
+
+      def destroy
+        if @component
+          @component.destroy!
+          render json: { message: "Component with ID: #{params[:id]} deleted" }, status: :ok
         else
           render json: { error: "Component with ID: #{params[:id]} not found" }, status: :not_found
         end

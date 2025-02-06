@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       end
 
       resources :folders do
-        resources :components, only: [:index, :create, :show]
+        resources :components, only: [:index, :create, :show, :destroy]
       end
     end
   end

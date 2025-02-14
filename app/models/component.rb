@@ -12,5 +12,5 @@ class Component < ApplicationRecord
   validates :currency, presence: true
   validates :name, presence: true, length: { maximum: 120 }
   validates :weight, presence: true
-  validates :measurement, presence: true
+  validates :measurement, presence: true, inclusion: { in: %w(kg lb), message: "%{value} is not a valid measurement" }
 end

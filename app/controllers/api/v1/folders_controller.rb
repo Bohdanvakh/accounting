@@ -4,7 +4,7 @@ module Api
       before_action :authenticate!
 
       def index
-        render json: { folders: current_user.folders }, status: :ok
+        render json: { folders: detailed_folders(current_user) }, status: :ok
       end
 
       def create
@@ -36,6 +36,16 @@ module Api
       end
 
       private
+
+      def detailed_folders(user)
+        user.folders.map do |folder|
+          {
+            folder: folder,
+            components_number: folder.components.count,
+            weight: folder.weight # weight in kgs
+          }
+        end
+      end
 
       def folder_params
         params.permit(:name)

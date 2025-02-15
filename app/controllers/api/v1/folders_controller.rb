@@ -42,7 +42,10 @@ module Api
           {
             folder: folder,
             components_number: folder.components.count,
-            weight: folder.weight # weight in kgs
+            area: folder.area,
+            area_measurement: 'cm^3',
+            weight: folder.weight,
+            weight_measurement: 'kgs'
           }
         end
       end

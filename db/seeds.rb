@@ -38,8 +38,9 @@ end
 components.each do |component|
   Dimension.create!(
     component: component,
-    length: 10.1,
-    width: 10.05,
-    height: 10.1
+    length: 101,
+    width: 101,
+    height: 101,
+    measurement: 'cm'
   )
 end

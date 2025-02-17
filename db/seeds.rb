@@ -14,7 +14,6 @@ unless Rails.env.production?
     )
   end
 
-
   folders = users.flat_map do |user|
     30.times.map do
       Folder.create!(
@@ -48,4 +47,3 @@ unless Rails.env.production?
     )
   end
 end
-

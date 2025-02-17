@@ -1,46 +1,51 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# Command to run rails seeds to create data in your db: bin/rails db:seed
+# In this file we create basic data for our application db.
+# If you want to extend data, create new instance objects etc please create separate seeds file
+# for that. For example: db/seeds/new_file.rb.
+# And run new files as: bin/rails db:seed:new_file
 
-User.destroy_all # remove users before run seeds
+unless Rails.env.production?
+  users = 100.times.map do
+    User.create!(
+      username: Faker::Name.name,
+      phone_number: Faker::PhoneNumber.phone_number_with_country_code,
+      confirmed: true,
+      active: true
+    )
+  end
 
-user = User.create!(
-  username: 'admin',
-  phone_number: '+1234567890',
-  confirmed: true,
-  active: true
-)
 
-folder = Folder.create!(
-  user: user,
-  name: 'My Folder',
-  description: 'This is a folder'
-)
+  folders = users.flat_map do |user|
+    30.times.map do
+      Folder.create!(
+        user: user,
+        name: "#{Faker::Name.name} folder"
+      )
+    end
+  end
 
-components = 10.times.map do |i|
-  Component.create!(
-    folder: folder,
-    price: 100 + i,
-    code: 1234567890 + i,
-    name: "Component #{i + 1}",
-    weight: 10.5 + i,
-    measurement: 'lb',
-    currency: 'USD'
-  )
+  components = folders.flat_map do |folder|
+    20.times.map do
+      Component.create!(
+        folder: folder,
+        price: rand(10..320),
+        code: "#{rand(10**9..10**10-1)}",
+        name: "#{Faker::Name.name} component",
+        weight: rand(0..99),
+        measurement: ['lb', 'kg'].sample,
+        currency: 'USD'
+      )
+    end
+  end
+
+  components.each do |component|
+    Dimension.create!(
+      component: component,
+      length: rand(0..500),
+      width: rand(0..500),
+      height: rand(0..500),
+      measurement: ['cm', 'in'].sample
+    )
+  end
 end
 
-components.each do |component|
-  Dimension.create!(
-    component: component,
-    length: 101,
-    width: 101,
-    height: 101,
-    measurement: 'cm'
-  )
-end

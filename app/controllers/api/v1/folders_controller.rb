@@ -38,10 +38,10 @@ module Api
       private
 
       def detailed_folders(user)
-        user.folders.map do |folder|
+        user.folders.includes(components: :dimension).map do |folder|
           {
             folder: folder,
-            components_number: folder.components.count,
+            components_number: folder.components.size,
             area: folder.area,
             area_measurement: 'cm^3',
             weight: folder.weight,

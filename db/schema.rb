@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_17_220258) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_18_223033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_17_220258) do
     t.bigint "user_id", null: false
     t.string "name", limit: 120, null: false
     t.string "description", limit: 120
+    t.string "code", null: false
+    t.index ["code"], name: "index_folders_on_code"
+    t.index ["name"], name: "index_folders_on_name"
     t.index ["user_id"], name: "index_folders_on_user_id"
   end
 

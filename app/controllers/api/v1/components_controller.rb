@@ -1,7 +1,7 @@
 module Api
   module V1
     class ComponentsController < ApplicationController
-      # before_action :authenticate!
+      before_action :authenticate!
       before_action :get_folder, only: [:index, :create, :show, :destroy]
       before_action :get_component, only: [:show, :destroy]
 

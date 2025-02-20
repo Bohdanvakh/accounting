@@ -45,7 +45,7 @@ module Api
         folders.includes(components: :dimension).map do |folder|
           {
             folder: folder,
-            price: folder.components.map(&:price).sum,
+            price: folder.components_price_sum,
             components_number: folder.components.size,
             area: folder.area,
             area_measurement: 'cm^3',

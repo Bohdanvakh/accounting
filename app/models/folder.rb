@@ -28,4 +28,8 @@ class Folder < ApplicationRecord
   def set_code
     self.code = "F_#{DateTime.now.to_i}_U#{user_id}"
   end
+
+  def components_price_sum
+    components.map(&:price).sum
+  end
 end

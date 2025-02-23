@@ -12,6 +12,12 @@ class Folder < ApplicationRecord
   # Scopes
   scope :by_name, ->(name) { where("name = ?", name) }
   scope :by_code, ->(code) { where("code = ?", code) }
+  scope :lower_price, -> { joins(:components).group('folders.id')
+                                             .select('folders.*, SUM(components.price) AS total_price')
+                                             .order('total_price ASC') }
+  scope :higher_price, -> { joins(:components).group('folders.id')
+                                             .select('folders.*, SUM(components.price) AS total_price')
+                                             .order('total_price DESC') }
 
   # Validations
   validates :name, presence: true, length: {minimum:6, maximum:120}, format: {with: /[a-zA-Z]/}

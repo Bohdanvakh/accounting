@@ -4,7 +4,7 @@ module Api
       before_action :authenticate!
 
       def index
-        render json: { folders: detailed_folders(current_user, params[:name], params[:code]) }, status: :ok
+        render json: { folders: detailed_folders(current_user, params[:name], params[:code], params[:order_by]) }, status: :ok
       end
 
       def create
@@ -37,10 +37,12 @@ module Api
 
       private
 
-      def detailed_folders(user, name, code)
+      def detailed_folders(user, name, code, order_by)
         folders = user.folders
         folders = folders.by_name(name) if name
         folders = folders.by_code(code) if code
+        folders = folders.lower_price if order_by == 'lower_price'
+        folders = folders.higher_price if order_by == 'higher_price'
 
         folders.includes(components: :dimension).map do |folder|
           {

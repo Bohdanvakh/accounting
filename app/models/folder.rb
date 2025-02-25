@@ -4,14 +4,14 @@ class Folder < ApplicationRecord
 
   # Include concerns
   include FolderMethods
+  include Searchable
 
   # Associations
   belongs_to :user
   has_many :components, dependent: :destroy
 
   # Scopes
-  scope :by_name, ->(name) { where("name = ?", name) }
-  scope :by_code, ->(code) { where("code = ?", code) }
+  include_searchable_scopes :by_name, :by_code # includes scopes we want to use
   scope :lower_price, -> { joins(:components).group('folders.id')
                                              .select('folders.*, SUM(components.price) AS total_price')
                                              .order('total_price ASC') }

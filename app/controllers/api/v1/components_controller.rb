@@ -7,7 +7,9 @@ module Api
 
       def index
         if @folder
-          render json: { components: @folder.components_with_dimension }, status: :ok
+          render json: { components: detailded_components(params[:folder_id],
+                                                          params[:name],
+                                                          params[:order_by]) }, status: :ok
         else
           render json: { error: "Folder with ID: #{params[:folder_id]} not found" }, status: :not_found
         end
@@ -40,6 +42,32 @@ module Api
       end
 
       private
+
+      def detailded_components(folder_id, name, order_by)
+        folder = Folder.find(folder_id)
+        components = folder.components
+        return "There are no components in this folder." if components.empty?
+
+        components = components.by_name(name) if name
+        components = components.lower_price if order_by == 'lower_price'
+        components = components.higher_price if order_by == 'higher_price'
+
+        components.map do |component|
+          {
+            id: component.id,
+            name: component.name,
+            code: component.code,
+            price: {
+              value: component.price,
+              currency: component.currency
+            },
+            weight: {
+              value: component.weight,
+              measurement: component.measurement
+            }
+          }
+        end
+      end
 
       def get_folder
         @folder = Folder.find(params[:folder_id])

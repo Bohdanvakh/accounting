@@ -1,6 +1,10 @@
 class Component < ApplicationRecord
   # Include concerns
   include ComponentMethods
+  include Searchable
+
+  # Scopes
+  include_searchable_scopes :by_name # includes scopes we want to use
 
   # Associations
   belongs_to :folder

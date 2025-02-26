@@ -13,6 +13,7 @@ class User < ApplicationRecord
   # Associations
   has_many :folders, dependent: :destroy
   has_many :components, through: :folder
+  has_one :image, as: :imageable
 
   # Validations
   validates :username, presence: true, uniqueness: true

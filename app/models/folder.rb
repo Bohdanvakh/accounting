@@ -9,6 +9,7 @@ class Folder < ApplicationRecord
   # Associations
   belongs_to :user
   has_many :components, dependent: :destroy
+  has_one :image, as: :imageable
 
   # Scopes
   include_searchable_scopes :by_name, :by_code # includes scopes we want to use

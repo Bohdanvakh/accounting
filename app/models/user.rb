@@ -17,5 +17,14 @@ class User < ApplicationRecord
 
   # Validations
   validates :username, presence: true, uniqueness: true
-  validates :phone_number, presence: true, uniqueness: true
+  validates :phone_number, presence: true, uniqueness: true, format: { with: /\A\+?\d+\z/, message: "only allows + and numbers" }
+
+  def detailed_info
+    {
+      id: id,
+      username: username,
+      phone_number: phone_number,
+      image_url: image.url
+    }
+  end
 end

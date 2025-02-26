@@ -2,6 +2,8 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :check_if_user_exists, only: [:create, :confirm_user]
+      before_action :authenticate!, only: [:show]
+      before_action :set_user, only: [:show]
 
       def create
         if @user # return if user exists
@@ -18,6 +20,10 @@ module Api
           TwilioService.new.send_sms(@user, @user.phone_confirmation_token)
           render json: { message: "Confirmation code was sent to #{@user.phone_number}" }, status: :ok
         end
+      end
+
+      def show
+        render json: { user: @user.detailed_info }
       end
 
       def confirm_user
@@ -37,6 +43,10 @@ module Api
 
       def check_if_user_exists
         @user = User.find_by(phone_number: params[:phone_number])
+      end
+
+      def set_user
+        @user = User.find_by(id: params[:id])
       end
     end
   end

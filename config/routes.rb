@@ -14,7 +14,7 @@ Rails.application.routes.draw do
       post 'verify_phone', to: 'sessions#authenticate_phone_number', as: :verify_phone
       post 'exit', to: 'sessions#set_user_active_false', as: :logout
 
-      resources :users, only: [:create]
+      resources :users, only: [:create, :show]
       resources :sessions, only: [:create]
 
       resources :users do

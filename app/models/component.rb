@@ -12,6 +12,7 @@ class Component < ApplicationRecord
   # Associations
   belongs_to :folder
   has_one :user, through: :folder
+  has_one :image, as: :imageable
   has_one :dimension, dependent: :destroy
 
   # Validations

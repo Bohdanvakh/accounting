@@ -2,8 +2,8 @@ module Api
   module V1
     class ComponentsController < ApplicationController
       before_action :authenticate!
-      before_action :get_folder, only: [:index, :create, :show, :destroy]
-      before_action :get_component, only: [:show, :destroy]
+      before_action :get_folder, only: [:index, :create, :show, :update, :destroy]
+      before_action :get_component, only: [:show, :update, :destroy]
 
       def index
         if @folder
@@ -27,6 +27,15 @@ module Api
       def show
         if @component
           render json: { component: @component.with_dimension }, status: :ok
+        else
+          render json: { error: "Component with ID: #{params[:id]} not found" }, status: :not_found
+        end
+      end
+
+      def update
+        if @component
+          @component.update!(component_params) # update if valid. If not render validation errors.
+          render json: @component
         else
           render json: { error: "Component with ID: #{params[:id]} not found" }, status: :not_found
         end

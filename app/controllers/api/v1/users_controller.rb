@@ -2,7 +2,7 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :check_if_user_exists, only: [:create, :confirm_user]
-      # before_action :authenticate!, only: [:show, :update]
+      before_action :authenticate!, only: [:show, :update]
       before_action :set_user, only: [:show, :update]
 
       def create

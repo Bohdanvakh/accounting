@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   # Callbacks
   before_validation :set_username
+  after_save :send_sms_if_phone_number_changed
 
   # Associations
   has_many :folders, dependent: :destroy

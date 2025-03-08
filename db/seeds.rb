@@ -8,7 +8,7 @@ unless Rails.env.production?
   users = 100.times.map do
     User.create!(
       username: Faker::Name.name,
-      phone_number: Faker::PhoneNumber.phone_number_with_country_code,
+      phone_number: "+#{rand(10**9..10**10-1)}",
       confirmed: true,
       active: true
     )

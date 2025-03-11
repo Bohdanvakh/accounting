@@ -3,13 +3,13 @@ ARG RUBY_VERSION=3.1.4
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
-WORKDIR /rails
+WORKDIR /app
 
 # Set production environment
-ENV RAILS_ENV="development" \
+ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT=""
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
@@ -32,7 +32,7 @@ RUN bundle exec bootsnap precompile app/ lib/
 # Final stage for app image
 FROM base
 
-WORKDIR /rails
+WORKDIR /app
 
 # Install packages needed for deployment
 RUN apt-get update -qq && \
@@ -41,7 +41,7 @@ RUN apt-get update -qq && \
 
 # Copy built artifacts: gems, application
 COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
+COPY --from=build /app /app
 
 # Run and own only the runtime fildes as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
@@ -57,5 +57,4 @@ ENTRYPOINT [ "./bin/docker-entrypoint" ]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-# CMD ["./bin/rails", "server"]
-CMD ["ruby bin/rails server", "./bin/rails", "server"]
+CMD ["rails", "server", "-b", "0.0.0.0"]

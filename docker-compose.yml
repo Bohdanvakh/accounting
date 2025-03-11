@@ -1,0 +1,39 @@
+name: account
+version: "3.8"
+services:
+
+  db:
+    image: postgres:16
+    volumes:
+      - "postgres:/var/lib/postgresql/data"
+    env_file:
+      - .env
+
+  backend:
+    build: .
+    command: bundle exec rails server -b 0.0.0.0 -p 3000
+    volumes:
+      - ".:/be"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  frontend:
+    build:
+      context: ../fe
+    depends_on:
+      - backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - "../fe:/fe"
+    environment:
+      - PORT=8080
+    command: ["npm", "start"]
+
+volumes:
+  postgres:
+

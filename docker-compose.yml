@@ -21,19 +21,6 @@ services:
     env_file:
       - .env
 
-  frontend:
-    build:
-      context: ../fe
-    depends_on:
-      - backend
-    ports:
-      - "8080:8080"
-    volumes:
-      - "../fe:/fe"
-    environment:
-      - PORT=8080
-    command: ["npm", "start"]
-
 volumes:
   postgres:
 

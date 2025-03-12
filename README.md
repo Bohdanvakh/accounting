@@ -113,3 +113,5 @@ that command will create image of your application. Then you can run next comman
 docker-compose up
 ```
 that command will create and run containers for your back end application. You would be able to use Rails, postgresql and other servers.
+
+OR you can check this [article](https://medium.com/@shoira.shakirovna/create-docker-container-with-react-and-ruby-on-rails-projects-98a8a0f5350e)

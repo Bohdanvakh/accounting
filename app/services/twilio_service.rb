@@ -8,7 +8,7 @@ class TwilioService
     @client.messages.create(
       from: ENV['TWILIO_PHONE_NUMBER'],
       to: user.phone_number,
-      body: "You confirmation code is: #{code}"
+      body: "Your confirmation code is: #{code}"
     )
   end
 end

@@ -14,11 +14,19 @@ module Api
         @user = User.new(username: params[:username], phone_number: params[:phone_number]) # create new user if not exists
 
         if @user
-          @user.save
-          @user.set_phone_confirmation_token
+          phone_confirmation_token = ConfirmationTokenGenerator.generate
 
-          TwilioService.new.send_sms(@user, @user.phone_confirmation_token)
-          render json: { message: "Confirmation code was sent to #{@user.phone_number}" }, status: :ok
+          begin
+            TwilioService.new.send_sms(@user, phone_confirmation_token)
+            @user.save
+            @user.update!(phone_confirmation_token: phone_confirmation_token,
+                          token_sent_at: Time.now)
+
+            render json: { message: "Confirmation code was sent to #{@user.phone_number}" }, status: :ok
+            return
+          rescue Twilio::REST::RestError => e
+            render json: { message: "Can't send SMS verification code to #{@user.phone_number}" }, status: :conflict
+          end
         end
       end
 

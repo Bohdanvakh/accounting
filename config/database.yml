@@ -26,4 +26,4 @@ test:
 
 production:
   <<: *default
-  database: production
+  database: <%= ENV.fetch("POSTGRES_DB_PROD") %>

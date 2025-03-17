@@ -59,9 +59,3 @@ jobs:
       - name: Build and test with rspec
         run: |
           bundle exec rspec spec
-        
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v4
-        with:
-          name: code-coverage-report
-          path: output/test/code-coverage.html

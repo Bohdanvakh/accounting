@@ -18,6 +18,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
+          POSTGRES_DB_PROD: ${{ secrets.POSTGRES_DB_PROD }}
         ports:
           - 5432:5432
     
@@ -50,6 +51,7 @@ jobs:
           RAILS_ENV: test
           WITH_COVERAGE: true
           DISABLE_SPRING: 1
+          POSTGRES_DB_PROD: ${{ secrets.POSTGRES_DB_PROD }}
         run: |
           bundle exec rails db:prepare
           bundle exec rake test

@@ -11,27 +11,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:  # Add global env variables
-      POSTGRES_DB: test
+    env:  # Додаємо глобальні змінні оточення
+      POSTGRES_DB: postgres
       POSTGRES_HOST: localhost
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      RAILS_ENV: test
-      WITH_COVERAGE: true
-      DISABLE_SPRING: 1
       POSTGRES_DB_PROD: ${{ secrets.POSTGRES_DB_PROD }}
 
     services:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: test
-          POSTGRES_PASSWORD: postgres
           POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_DB_PROD: ${{ secrets.POSTGRES_DB_PROD }}
+          POSTGRES_HOST: localhost
         ports:
           - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-  
+
     steps:
       - uses: actions/checkout@v2
 

@@ -19,6 +19,7 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
           POSTGRES_DB_PROD: ${{ secrets.POSTGRES_DB_PROD }}
+          POSTGRES_HOST: localhost
         ports:
           - 5432:5432
     
@@ -29,7 +30,7 @@ jobs:
         with:
           ruby-version: 3.1.4
 
-      - uses: Borales/actions-yarn@v2.3.0
+      - uses: Borales/actions-yarn@v4
         with:
           cmd: install
 
@@ -44,10 +45,10 @@ jobs:
 
       - name: Setup Database
         env:
-          PG_DATABASE: postgres
-          PG_HOST: localhost
-          PG_USER: postgres
-          PG_PASSWORD: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
           RAILS_ENV: test
           WITH_COVERAGE: true
           DISABLE_SPRING: 1

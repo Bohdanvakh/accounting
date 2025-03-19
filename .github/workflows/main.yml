@@ -17,6 +17,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.4
+          bundler-cache: true
 
       - name: Install system dependencies
         run: sudo apt install -yqq libpq-dev
@@ -48,8 +49,19 @@ jobs:
           restore-keys: |
             node-${{ runner.os }}-
 
+      - name: Save Bundler & Gems as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: bundler-cache
+          path: vendor/bundle
+
+      - name: Save Node.js dependencies as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: node_modules
+          path: node_modules
+
   test:
-    needs: build
     runs-on: ubuntu-latest
 
     env:
@@ -75,24 +87,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Restore Bundler cache # Speed up the workflow by restoring the cached gems to avoid running bundle install every time the workflow runs.
-        uses: actions/cache@v3
+      - name: Restore Bundler & Gems
+        uses: actions/download-artifact@v3
         with:
+          name: bundler-cache
           path: vendor/bundle
-          key: gems-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            gems-${{ runner.os }}-
 
-      - name: Restore node_modules cache # Speed up the workflow by restoring the cached node_modules to avoid running yarn install every time the workflow runs.
-        uses: actions/cache@v3
+      - name: Restore Node.js dependencies
+        uses: actions/download-artifact@v3
         with:
+          name: node_modules
           path: node_modules
-          key: node-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            node-${{ runner.os }}-
 
       - name: Setup Database
         run: bundle exec rails db:prepare
 
-      - name: Build and test with rspec
+      - name: Run tests with RSpec
         run: bundle exec rspec spec

@@ -11,7 +11,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:  # Додаємо глобальні змінні оточення
+    env:
       POSTGRES_DB: postgres
       POSTGRES_HOST: localhost
       POSTGRES_USER: postgres

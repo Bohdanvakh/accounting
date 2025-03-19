@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -27,39 +27,29 @@ jobs:
 
       - name: Install Gems
         run: bundle install
-      
-      - name: Cache gems # Speed up the workflow by caching the installed gems to avoid running bundle install every time the workflow runs.
-        uses: actions/cache@v3
-        with:
-          path: vendor/bundle
-          key: gems-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            gems-${{ runner.os }}-
 
       - name: Install Node.js dependencies
         uses: Borales/actions-yarn@v4
         with:
           cmd: install
 
-      - name: Cache node_modules # Speed up the workflow by caching the installed node_modules to avoid running yarn install every time the workflow runs.
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            node-${{ runner.os }}-
-
       - name: Save Bundler & Gems as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bundler-cache
           path: vendor/bundle
 
       - name: Save Node.js dependencies as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: node_modules
           path: node_modules
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: output/test/code-coverage.html
 
   test:
     runs-on: ubuntu-latest
@@ -85,19 +75,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Restore Bundler & Gems
-        uses: actions/download-artifact@v3
-        with:
-          name: bundler-cache
-          path: vendor/bundle
-
-      - name: Restore Node.js dependencies
-        uses: actions/download-artifact@v3
-        with:
-          name: node_modules
-          path: node_modules
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4
 
       - name: Setup Database
         run: bundle exec rails db:prepare

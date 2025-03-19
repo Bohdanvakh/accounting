@@ -1,17 +1,58 @@
 name: main
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
-    env:  # Додаємо глобальні змінні оточення
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.4
+
+      - name: Install system dependencies
+        run: sudo apt install -yqq libpq-dev
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install Gems
+        run: bundle install
+      
+      - name: Cache gems # Speed up the workflow by caching the installed gems to avoid running bundle install every time the workflow runs.
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: gems-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            gems-${{ runner.os }}-
+
+      - name: Install Node.js dependencies
+        uses: Borales/actions-yarn@v4
+        with:
+          cmd: install
+
+      - name: Cache node_modules # Speed up the workflow by caching the installed node_modules to avoid running yarn install every time the workflow runs.
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-${{ runner.os }}-
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    env:
       POSTGRES_DB: postgres
       POSTGRES_HOST: localhost
       POSTGRES_USER: postgres
@@ -31,31 +72,27 @@ jobs:
           - 5432:5432
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Restore Bundler cache # Speed up the workflow by restoring the cached gems to avoid running bundle install every time the workflow runs.
+        uses: actions/cache@v3
         with:
-          ruby-version: 3.1.4
+          path: vendor/bundle
+          key: gems-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            gems-${{ runner.os }}-
 
-      - uses: Borales/actions-yarn@v4
+      - name: Restore node_modules cache # Speed up the workflow by restoring the cached node_modules to avoid running yarn install every time the workflow runs.
+        uses: actions/cache@v3
         with:
-          cmd: install
-
-      - name: Install dependencies
-        run: |
-          sudo apt install -yqq libpq-dev
-          gem install bundler
-      
-      - name: Install Gems
-        run: |
-          bundle install
+          path: node_modules
+          key: node-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-${{ runner.os }}-
 
       - name: Setup Database
-        run: |
-          bundle exec rails db:prepare
-          bundle exec rake test
+        run: bundle exec rails db:prepare
 
       - name: Build and test with rspec
-        run: |
-          bundle exec rspec spec
+        run: bundle exec rspec spec

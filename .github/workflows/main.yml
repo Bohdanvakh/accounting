@@ -24,8 +24,7 @@ jobs:
       - name: Install Bundler & Gems
         run: |
           gem install bundler
-          bundle config set --local path 'vendor/bundle'
-          bundle install --jobs 4 --retry 3
+          bundle install
 
   test:
     runs-on: ubuntu-latest
@@ -61,8 +60,7 @@ jobs:
       - name: Install Bundler & Gems
         run: |
           gem install bundler
-          bundle config set --local path 'vendor/bundle'
-          bundle install --jobs 4 --retry 3
+          bundle install
 
       - name: Setup Database
         run: bundle exec rails db:prepare

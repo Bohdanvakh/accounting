@@ -17,45 +17,15 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.4
-          bundler-cache: true
-
-      - name: Verify Ruby and Bundler
-        run: |
-          ruby -v
-          gem -v
-          bundler -v
 
       - name: Install system dependencies
         run: sudo apt install -yqq libpq-dev
 
-      - name: Install Bundler
-        run: gem install bundler
-
-      - name: Install Gems
-        run: bundle install --path vendor/bundle
-
-      - name: Install Node.js dependencies
-        uses: Borales/actions-yarn@v4
-        with:
-          cmd: install
-
-      - name: Save Bundler & Gems as an artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundler-cache
-          path: vendor/bundle
-
-      - name: Save Node.js dependencies as an artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: node_modules
-          path: node_modules
-
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v4
-        with:
-          name: code-coverage-report
-          path: output/test/code-coverage.html
+      - name: Install Bundler & Gems
+        run: |
+          gem install bundler
+          bundle config set --local path 'vendor/bundle'
+          bundle install --jobs 4 --retry 3
 
   test:
     runs-on: ubuntu-latest
@@ -83,19 +53,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with: ruby-version: 3.1.4
 
-      - name: Verify Ruby and Bundler
+      - name: Install Bundler & Gems
         run: |
-          ruby -v
-          gem -v
-          bundler -v
-
-      - name: Verify Bundler and Gems
-        run: |
+          gem install bundler
           bundle config set --local path 'vendor/bundle'
-          bundle check || bundle install --path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Setup Database
         run: bundle exec rails db:prepare

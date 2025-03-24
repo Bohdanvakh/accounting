@@ -29,13 +29,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      POSTGRES_DB: postgres
+      POSTGRES_DB_PROD: ${{ secrets.POSTGRES_DB_PROD }}
+
     services:
       postgres:
         image: postgres:16
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
           POSTGRES_DB_PROD: ${{ secrets.POSTGRES_DB_PROD }}
           POSTGRES_HOST: localhost
         ports:

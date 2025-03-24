@@ -70,12 +70,14 @@ jobs:
           done
 
       - name: Setup database
-        run: |
-          cp config/database.ci.yml config/database.yml
-          cat config/database.yml
-          bundle exec rails db:schema:load
         env:
           RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        run: |
+          cp config/database.ci.yml config/database.yml
+          bundle exec rails db:schema:load
 
       - name: Run Tests
         run: bundle exec rspec --format progress

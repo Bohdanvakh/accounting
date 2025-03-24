@@ -38,7 +38,6 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          RAILS_ENV: test
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: test
@@ -75,6 +74,8 @@ jobs:
           cp config/database.ci.yml config/database.yml
           cat config/database.yml
           bundle exec rails db:schema:load
+        env:
+          RAILS_ENV: test
 
       - name: Run Tests
         run: bundle exec rspec --format progress

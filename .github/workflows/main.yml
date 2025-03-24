@@ -72,7 +72,7 @@ jobs:
       - name: Setup database
         run: |
           cp config/database.ci.yml config/database.yml
-          run: cat config/database.yml
+          cat config/database.yml
           bundle exec rails db:schema:load
 
       - name: Run Tests

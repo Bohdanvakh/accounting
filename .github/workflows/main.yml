@@ -7,7 +7,7 @@ on:
 
 env:
   POSTGRES_USER: postgres
-  POSTGRES_DB: postgres
+  POSTGRES_DB: test
   POSTGRES_HOST: localhost
   POSTGRES_DB_PROD: ${{ secrets.POSTGRES_DB_PROD }}
 
@@ -39,7 +39,9 @@ jobs:
       postgres:
         image: postgres:16
         env:
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
         ports: ['5432:5432']
         options: >-
           --health-cmd pg_isready
@@ -61,15 +63,17 @@ jobs:
           gem install bundler
           bundle install
 
-      - name: Prepare Database
-        run: bundle exec rails db:migrate
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h 127.0.0.1 -p 5432; do
+            echo "Waiting for PostgreSQL...";
+            sleep 5;
+          done
 
-      - name: Run Tests
-        env:
-          RAILS_ENV: test
-          POSTGRES_HOST: localhost
-          DISABLE_SPRING: 1
+      - name: Setup database
         run: |
           cp config/database.ci.yml config/database.yml
           bundle exec rails db:schema:load
-          bundle exec rspec --format progress
+
+      - name: Run Tests
+        run: bundle exec rspec --format progress

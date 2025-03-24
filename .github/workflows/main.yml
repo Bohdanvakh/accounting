@@ -69,7 +69,7 @@ jobs:
             sleep 5;
           done
 
-      - name: Setup database
+      - name: Setup database & Run tests
         env:
           RAILS_ENV: test
           POSTGRES_USER: postgres
@@ -78,6 +78,4 @@ jobs:
         run: |
           cp config/database.ci.yml config/database.yml
           bundle exec rails db:schema:load
-
-      - name: Run Tests
-        run: bundle exec rspec --format progress
+          bundle exec rspec --format progress

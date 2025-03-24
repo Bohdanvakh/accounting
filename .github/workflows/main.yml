@@ -58,8 +58,8 @@ jobs:
           gem install bundler
           bundle install
 
-      - name: Setup Database
-        run: bundle exec rails db:prepare
+      - name: Prepare Database
+        run: bundle exec rails db:migrate
 
       - name: Run tests with RSpec
         run: bundle exec rspec spec

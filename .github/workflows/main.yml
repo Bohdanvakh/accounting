@@ -5,6 +5,11 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  POSTGRES_USER: postgres
+  POSTGRES_DB: test
+  POSTGRES_HOST: localhost
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,24 +34,19 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      POSTGRES_DB: postgres
-      POSTGRES_HOST: localhost
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB_PROD: ${{ secrets.POSTGRES_DB_PROD }}
-
     services:
       postgres:
         image: postgres:16
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-          POSTGRES_DB_PROD: ${{ secrets.POSTGRES_DB_PROD }}
-          POSTGRES_HOST: localhost
-        ports:
-          - 5432:5432
+          POSTGRES_DB: test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout repository
@@ -62,8 +62,20 @@ jobs:
           gem install bundler
           bundle install
 
-      - name: Setup Database
-        run: bundle exec rails db:prepare
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h 127.0.0.1 -p 5432; do
+            echo "Waiting for PostgreSQL...";
+            sleep 5;
+          done
 
-      - name: Run tests with RSpec
-        run: bundle exec rspec spec
+      - name: Setup database & Run tests
+        env:
+          RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        run: |
+          cp config/database.ci.yml config/database.yml
+          bundle exec rails db:schema:load
+          bundle exec rspec --format progress

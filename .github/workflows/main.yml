@@ -94,6 +94,13 @@ jobs:
         run: |
           gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
 
+      - name: Debug Workspace
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files in directory:"
+          ls -la
+
       - name: Push Docker Image to Artifact Registry
         run: |
           docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/accounting/my-app:latest .

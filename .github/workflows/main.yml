@@ -99,9 +99,9 @@ jobs:
 
       - name: Debug Workspace
         run: |
-          echo "Current directory:"
+          echo "Inspecting current directory:"
           pwd
-          echo "Files in directory:"
+          echo "Listing files:"
           ls -la
 
       - name: Push Docker Image to Artifact Registry

@@ -6,10 +6,12 @@ FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
 WORKDIR /app
 
 # Set environment
-ENV RAILS_ENV="development" \
+ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT=""
+    BUNDLE_WITHOUT="" \
+    PORT="8080" \
+    PATH="/usr/local/bundle/bin:${PATH}"
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
@@ -56,5 +58,5 @@ USER rails:rails
 ENTRYPOINT [ "./bin/docker-entrypoint" ]
 
 # Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD ["rails", "server", "-b", "0.0.0.0"]
+EXPOSE 8080
+CMD ["rails", "server", "-b", "0.0.0.0", "-p", "8080"]

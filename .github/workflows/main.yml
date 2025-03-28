@@ -79,3 +79,39 @@ jobs:
           cp config/database.ci.yml config/database.yml
           bundle exec rails db:schema:load
           bundle exec rspec --format progress
+
+  deploy:
+    needs: [build, test] # Deploy only after successful build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
+
+      - name: Debug Workspace
+        run: |
+          echo "Inspecting current directory:"
+          pwd
+          echo "Listing files:"
+          ls -la
+
+      - name: Push Docker Image to Artifact Registry
+        run: |
+          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/accounting/my-app:latest .
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/accounting/my-app:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ secrets.CLOUD_RUN_SERVICE }} \
+            --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/accounting/my-app:latest \
+            --region ${{ secrets.GCP_REGION }} \
+            --allow-unauthenticated

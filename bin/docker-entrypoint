@@ -6,4 +6,5 @@ if [ "${1}" == "rails" ] && [ "${2}" == "server" ]; then
   bundle exec rails db:prepare
 fi
 
-exec "${@}"
+# Use the first argument as the command to run
+exec bundle exec "${@}"

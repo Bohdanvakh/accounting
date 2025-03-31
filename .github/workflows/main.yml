@@ -97,13 +97,6 @@ jobs:
         run: |
           gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
 
-      - name: Debug Workspace
-        run: |
-          echo "Inspecting current directory:"
-          pwd
-          echo "Listing files:"
-          ls -la
-
       - name: Push Docker Image to Artifact Registry
         run: |
           docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/accounting/my-app:latest .
@@ -114,4 +107,5 @@ jobs:
           gcloud run deploy ${{ secrets.CLOUD_RUN_SERVICE }} \
             --image ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/accounting/my-app:latest \
             --region ${{ secrets.GCP_REGION }} \
-            --allow-unauthenticated
+            --allow-unauthenticated \
+            --set-env-vars="RAILS_ENV=production,DATABASE_URL=${{ secrets.DATABASE_URL }},SECRET_KEY_BASE=${{ sectets.SECRET_KEY_BASE }},GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},GCP_REGION=${{ secrets.GCP_REGION }}"

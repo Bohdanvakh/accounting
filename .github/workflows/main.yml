@@ -108,7 +108,7 @@ jobs:
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
             --set-env-vars 'RAILS_ENV=production' \
-            -- set-env-vars 'PORT=8080' \
+            --set-env-vars 'PORT=8080' \
             --set-env-vars 'DATABASE_URL=${{ secrets.DATABASE_URL }}' \
             --set-env-vars 'SECRET_KEY_BASE=${{ secrets.SECRET_KEY_BASE }}' \
             --set-env-vars 'GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}' \

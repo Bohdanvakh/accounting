@@ -45,6 +45,8 @@ RUN apt-get update -qq && \
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /app /app
 
+RUN chmod +x /app/bin/docker-entrypoint
+
 # Run and own only the runtime fildes as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
     chown -R rails:rails db log storage tmp
@@ -56,8 +58,6 @@ USER rails:rails
 
 # Entrypoint prepares the database.
 ENTRYPOINT [ "./bin/docker-entrypoint" ]
-
-RUN chmod +x /app/bin/docker-entrypoint
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 8080

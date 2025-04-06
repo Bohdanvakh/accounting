@@ -57,6 +57,8 @@ USER rails:rails
 # Entrypoint prepares the database.
 ENTRYPOINT [ "./bin/docker-entrypoint" ]
 
+RUN chmod +x /app/bin/docker-entrypoint
+
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 8080
 CMD ["rails", "server", "-b", "0.0.0.0", "-p", "8080"]

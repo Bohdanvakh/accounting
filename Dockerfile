@@ -11,6 +11,7 @@ ENV RAILS_ENV="production" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="" \
     PORT="8080" \
+    HOST="0.0.0.0" \
     PATH="/usr/local/bundle/bin:${PATH}"
 
 # Throw-away build stage to reduce size of final image

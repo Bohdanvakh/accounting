@@ -80,7 +80,8 @@ jobs:
           bundle exec rspec --format progress
 
   deploy:
-    needs: [build, test] # Deploy only after successful build and test
+    if: github.ref == 'refs/heads/main' # Deploy only on main branch
+    needs: [build, test]
     runs-on: ubuntu-latest
 
     steps:

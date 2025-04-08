@@ -1,8 +1,21 @@
 #!/bin/bash -e
 
+# Check if the DATABASE_URL environment variable is set
+echo "Checking database connection..."
+
+until pg_isready -d "$DATABASE_URL"; do
+  >&2 echo "Postgres is unavailable - sleeping"
+  sleep 2
+done
+
+echo "Database is up - continuing..."
+
 # If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
+if [ "${1}" == "rails" ] && [ "${2}" == "server" ]; then
+  echo "Preparing the database..."
+
+  bundle exec rails db:prepare
 fi
 
-exec "${@}"
+# Use the first argument as the command to run
+exec bundle exec "${@}"

@@ -22,7 +22,7 @@ if rails_env == "production"
   # variable to match the number of processors.
   worker_count = Integer(ENV.fetch("WEB_CONCURRENCY") { 1 })
   if worker_count > 1
-    workers worker_count
+    workers worker_countconfig/environments/production.rb
   else
     preload_app!
   end
@@ -32,7 +32,8 @@ end
 worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-port ENV.fetch("PORT") { 3000 }
+port ENV.fetch("PORT") { 8080 }
+bind "tcp://0.0.0.0:#{ENV['PORT'] || 8080}"
 
 # Specifies the `environment` that Puma will run in.
 environment rails_env
